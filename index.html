@@ -3,40 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>简单的 HTML 示例</title>
+    <title>高大上主页</title>
+    <meta name="description" content="这是一个高大上的现代化网页模板">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* 导航栏 */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 10%;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #007BFF;
+        }
+
+        /* 英雄区域 */
+        .hero {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #007BFF, #00BFFF);
+            color: #fff;
+            text-align: center;
+            padding: 0 10%;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .hero .btn {
+            padding: 12px 30px;
+            background-color: #fff;
+            color: #007BFF;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            animation: fadeIn 2.5s ease-in-out;
+        }
+
+        .hero .btn:hover {
+            background-color: #007BFF;
+            color: #fff;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 服务介绍 */
+        .services {
+            padding: 80px 10%;
+            text-align: center;
+            background-color: #fff;
+        }
+
+        .services h2 {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 40px;
+        }
+
+        .services .service-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .services .service {
+            flex: 1;
+            padding: 20px;
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .services .service:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .services .service h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .services .service p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        /* 客户评价 */
+        .testimonials {
+            padding: 80px 10%;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+
+        .testimonials h2 {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 40px;
+        }
+
+        .testimonials .testimonial-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .testimonials .testimonial {
+            flex: 1;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonials .testimonial p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .testimonials .testimonial h4 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* 页脚 */
+        footer {
+            padding: 20px 10%;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>测试网页</h1>
-    </header>
-
+    <!-- 导航栏 -->
     <nav>
+        <div class="logo">AI翻译
+        </div>
         <ul>
-            <li><a href="#section1">部分 1</a></li>
-            <li><a href="#section2">部分 2</a></li>
-            <li><a href="#section3">部分 3</a></li>
+            <li><a href="#home">首页</a></li>
+            <li><a href="#services">服务</a></li>
+            <li><a href="#testimonials">客户评价</a></li>
+            <li><a href="#contact">联系我们</a></li>
         </ul>
     </nav>
 
-    <main>
-        <section id="section1">
-            <h2>部分 1</h2>
-            <p>这是第一部分的内容。</p>
-        </section>
+    <!-- 英雄区域 -->
+    <section class="hero" id="home">
+        <div>
+            <h1>欢迎来到高大上的世界</h1>
+            <p>我们提供最优质的服务，助您实现梦想。</p>
+            <a href="/translate" class="btn">了解更多</a>
+        </div>
+    </section>
 
-        <section id="section2">
-            <h2>部分 2</h2>
-            <p>这是第二部分的内容。</p>
-        </section>
+    <!-- 服务介绍 -->
+    <section class="services" id="services">
+        <h2>我们的服务</h2>
+        <div class="service-container">
+            <div class="service">
+                <h3>服务一</h3>
+                <p>我们提供专业的服务一，满足您的需求。</p>
+            </div>
+            <div class="service">
+                <h3>服务二</h3>
+                <p>我们提供专业的服务二，助您成功。</p>
+            </div>
+            <div class="service">
+                <h3>服务三</h3>
+                <p>我们提供专业的服务三，为您保驾护航。</p>
+            </div>
+        </div>
+    </section>
 
-        <section id="section3">
-            <h2>部分 3</h2>
-            <p>这是第三部分的内容。</p>
-        </section>
-    </main>
+    <!-- 客户评价 -->
+    <section class="testimonials" id="testimonials">
+        <h2>客户评价</h2>
+        <div class="testimonial-container">
+            <div class="testimonial">
+                <p>“他们的服务非常专业，强烈推荐！”</p>
+                <h4>—— 客户 A</h4>
+            </div>
+            <div class="testimonial">
+                <p>“非常满意，效果超出预期！”</p>
+                <h4>—— 客户 B</h4>
+            </div>
+            <div class="testimonial">
+                <p>“团队非常靠谱，值得信赖！”</p>
+                <h4>—— 客户 C</h4>
+            </div>
+        </div>
+    </section>
 
+    <!-- 页脚 -->
     <footer>
-        <p>&copy; 2025 我的网页. 保留所有权利。</p>
+        <p>&copy; 2023 我的品牌. 保留所有权利。</p>
     </footer>
 </body>
 </html>
