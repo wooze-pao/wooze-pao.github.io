@@ -58,7 +58,8 @@ const getAiData = async(prompt) => {
      //console.log(prompt)
 
      try {
-         const response = await fetch('https://cloudfront.wooze.tech/api/data', {
+         const apiUrl = 'https://cloudfront.wooze.tech/api/data'
+         const response = await fetch(apiUrl, {
              method: "POST",
              headers: {
                  "Content-Type": "application/json",
