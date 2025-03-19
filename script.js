@@ -9,7 +9,7 @@ const historyBtn = document.getElementById('history')
 const historyWindow = document.querySelector('.history-window')
 const overlay = document.getElementById("overlay");
 
-let mainLau = localStorage.getItem('mainLang') || 'Afrikaans'
+let mainLau = localStorage.getItem('mainLang') || '自动选择'
 let toLau = localStorage.getItem('toLang') || 'Afrikaans';
 let history = JSON.parse(localStorage.getItem('history')) || [];
 
@@ -82,11 +82,17 @@ const getAiData = async(prompt) => {
 //事件监听模块
 
 btn.addEventListener('click',() => {
-    btn.classList.add('rotate')
+    const cache = mainLau
+    mainLau = toLau
+    toLau = cache
 
-    setTimeout(() => {
-        btn.classList.remove('rotate')
-    },500)
+    updateOption(select1,mainLau)
+    updateOption(select2,toLau)
+
+    localStorage.setItem('mainLang', mainLau);
+    localStorage.setItem('toLang', toLau);
+
+    getAiData(prompt)
 })
 
 
