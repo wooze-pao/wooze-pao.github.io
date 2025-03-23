@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,11 +44,10 @@ body {
 }
 
 #gemini {
-    width: 50px;
+    width: 100px;
     height: 50px;
 }
 
-/* 语言选择区域 */
 .select {
     display: flex;
     align-items: center;
@@ -58,6 +57,8 @@ body {
 
 .lau {
     padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -65,6 +66,7 @@ body {
     color: #333;
     cursor: pointer;
     transition: border-color 0.3s ease;
+    
 }
 
 .lau:hover {
@@ -91,12 +93,14 @@ body {
 
 /* 输入框区域 */
 #input {
+    position: relative; /* 作为参照点 */
+    margin-bottom: 20px;
     width: 100%;
     max-width: 600px;
-    margin-bottom: 20px;
 }
 
 .textarea {
+    
     width: 100%;
     height: 150px;
     padding: 15px;
@@ -109,12 +113,20 @@ body {
     transition: border-color 0.3s ease;
 }
 
+#level {
+    position: absolute;
+    right: 20px; /* 距离右侧 10px */
+    bottom: 20px; /* 距离底部 10px */
+    padding: 5px;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
 .textarea:focus {
     border-color: #007BFF;
     outline: none;
 }
 
-/* 输出区域 */
 #output {
     width: 100%;
     max-width: 600px;
@@ -132,56 +144,116 @@ body {
 #gemini-color {
     width: 50px;
     height: 50px;
-    opacity: 0.2;
+    opacity: 0.5;
 }
+
+.container {
+    display: none;
+    position: absolute;
+    grid-template-columns: repeat(4,1fr);
+    grid-template-rows: repeat(7,30px);
+    background-color: #fff;
+    border: 1px solid #CCC  ;
+    border-radius: 8px;
+    padding: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 200px);
+    margin-top: 20px;
+    z-index: 10;
+}
+
+.select {
+    position: relative;
+}
+.container > div {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.5s ease;
+    
+}
+
+.container > div:hover {
+    background-color: #e9ecef;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spin {
+    animation: rotate 1s linear infinite;
+}
+
     </style>
 </head>
 <body>
         <div id = "title">
-        <img src="assets/gemini-brand-color.svg" alt="Ai翻译" id = "gemini">
+        <img src="assets/gemini-brand-color.svg" alt="gemini" id = "gemini">
         <h1 class="ma-shan-zheng-regular">翻译<h1>
         </div>
 
     <div class="select">
-    <select class="lau roboto-body" id="select1">
-
-    </select>
+    <button class="lau roboto-body" id="select1">
+    <img src="assets/keyboard_arrow_down_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png">
+    </button>
+    
     <button class="switch-btn">
         <img src="assets/swap_horiz_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg">
     </button>
-    <select class="lau roboto-body" id="select2">
 
-    </select>
+    <button class="lau roboto-body" id="select2">
+        <img src="assets/keyboard_arrow_down_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png">
+    </button>
     </div>
+    <div class="container"></div>
 
     <div id = "input">
     <textarea class="textarea roboto-body" placeholder="请输入要翻译的内容"></textarea>
+    <select id="level">
+        <option value="正常">正常</option>
+        <option value="简单">简单</option>
+        <option value="幼儿园">幼儿园</option>
+    </select>
     </div>
     <div id = "output">
         <img src="assets/gemini-color.svg" id="gemini-color">
     </div>
+
     <script>
-        const selectElements = document.getElementsByClassName('lau')
+
+//DOM
+
+const selectElements = document.getElementsByClassName('lau')
 const textinput = document.querySelector('.textarea')
 const output = document.getElementById('output')
 const btn = document.querySelector('.switch-btn')
 const select1 = document.getElementById('select1')
 const select2 = document.getElementById('select2')
 const geminiIcon = document.getElementById('gemini-color')
-const historyBtn = document.getElementById('history')
-const historyWindow = document.querySelector('.history-window')
-const overlay = document.getElementById("overlay");
+const container = document.querySelector('.container')
+const level = document.getElementById('level')
 
 let mainLau = localStorage.getItem('mainLang') || '自动检测'
 let toLau = localStorage.getItem('toLang') || 'Afrikaans';
-let history = JSON.parse(localStorage.getItem('history')) || [];
+let stopIt = false;
+let promptChache = 'hahaahahahhahahahahahahahahahhaha' 
+let levelValue = localStorage.getItem('Level') || '正常' 
 
 
 const updateOption = (element,value) => {
-    element.value = value
+    element.textContent = value
 }
 
 window.onload = () => {
+    container.style.display = 'none'
     textinput.focus()
 }
 
@@ -194,6 +266,7 @@ const start = async() => {
 
         updateOption(select1,mainLau)
         updateOption(select2,toLau)
+        level.value = levelValue
     }
     catch(error){
         console.log(error)
@@ -203,25 +276,39 @@ start()
 
 //将语言列表导入到下拉栏
 const dropDownBar = (array) => {
-    Array.from(selectElements).forEach((select) => {
-        array.forEach((option) => {
-           const op = document.createElement('option')
-           op.value = option
-           op.textContent = option
-           select.appendChild(op)
-        })
+    array.forEach((option) => {
+    const op = document.createElement('div');
+    op.textContent = option;
+    op.id = option
+    container.appendChild(op); 
+    op.addEventListener('click',() => {
+        if(btnValue === select1) {
+            mainLau = option
+            updateOption(select1,mainLau)
+            localStorage.setItem('mainLang', mainLau);
+        }else{
+            toLau = option
+            updateOption(select2,toLau)
+            localStorage.setItem('toLang', toLau);
+        }
+
+        container.style.display = 'none';
     })
+});
+
 }
 
 //获取后端ai
 const getAiData = async(prompt) => {
     output.innerText = "";
+    promptChache = prompt
 
     if (!geminiIcon.parentNode) {
         output.appendChild(geminiIcon);  
     }
 
     geminiIcon.style.display = 'block'; 
+    geminiIcon.classList.add('spin');
      //console.log(prompt)
 
      try {
@@ -231,22 +318,52 @@ const getAiData = async(prompt) => {
              headers: {
                  "Content-Type": "application/json",
              },
-             body: JSON.stringify({ text:prompt ,language:toLau }),
+             body: JSON.stringify({ text:prompt ,language:toLau ,levelLang:levelValue}),
          })
           
          const data = await response.json()
+         stopIt = false
          geminiIcon.style.display = 'none'
          output.innerText = data.aitext
          history.unshift(data)
      } catch (error) {
          output.innerText = '无法获取信息'
+         stopIt = false
      }
 }
 
-
-
+const openSwitch = () => {
+    let btnValue;
+    const openState = container.style.display
+   if(openState === 'none') {
+    container.style.display = 'grid'
+   }
+   else{
+    container.style.display = 'none'
+   }
+}
 
 //事件监听模块
+
+document.addEventListener("click", function (event) {
+    if (!container.contains(event.target) && !select1.contains(event.target) && !select2.contains(event.target)) {
+        container.style.display = "none"; // 点击空白处隐藏
+    }
+});
+
+document.addEventListener("click", function (event) {
+    console.log('click')
+});
+
+select1.addEventListener('click',() => {
+   openSwitch()
+   btnValue = select1
+})
+
+select2.addEventListener('click',() => {
+   openSwitch()
+   btnValue = select2
+})
 
 btn.addEventListener('click',() => {
     const cache = mainLau
@@ -262,50 +379,38 @@ btn.addEventListener('click',() => {
     getAiData(prompt)
 })
 
-
-
-select1.addEventListener('change',(event)=> {
-  mainLau = event.target.value
-  console.log('用户的语言是',mainLau)
-  localStorage.setItem('mainLang',mainLau)
-})
-
-select2.addEventListener('change',(event)=> {
-    toLau = event.target.value
-    console.log('用户要翻译的语言是',toLau)
-    localStorage.setItem('toLang',toLau)
+level.addEventListener('change',() => {
+   levelValue = level.value
+   localStorage.setItem('Level',levelValue)
 })
 
 textinput.addEventListener('keydown',async(event) => {
     const key = event.key
+    
     if (key === "Enter")
     {
+       if(!stopIt) {
+        stopIt = true
+       
         const prompt = textinput.value.trim()
-    if(prompt === ''){
-        alert('请输入文本')
+        
+        if (prompt === ''){
+            alert('请输入文本')
+            stopIt = false
+            return
+        }
+        
+        await getAiData(prompt)
+        console.log('发送请求成功')
+       }else{
+        stopIt = false
+        console.log('发送请求禁止')
         return
+       }
+        
     }
-    getAiData(prompt)
-
     
-    
-    }
  })
-
-historyBtn.addEventListener('click',() => {
-    historyWindow.style.display = 'block'
-    overlay.style.display = 'block'
-})
-
-historyWindow.addEventListener('keydown',(event) => {
-    const key = event.key
-    console.log('key')
-    if (key === 'esc') {
-        historyWindow.style.display = 'none'
-        overlay.style.display = 'none'
-    }
-})
-
     </script>
 </body>
 </html>
