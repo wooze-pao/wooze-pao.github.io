@@ -245,7 +245,7 @@ let mainLau = localStorage.getItem('mainLang') || '自动检测'
 let toLau = localStorage.getItem('toLang') || 'Afrikaans';
 let stopIt = false;
 let promptChache = 'hahaahahahhahahahahahahahahahhaha' 
-let levelValue = localStorage.getItem('Level') || '正常' 
+let levelValue = localStorage.getItem('Level') || "正常"
 
 
 const updateOption = (element,value) => {
@@ -318,14 +318,16 @@ const getAiData = async(prompt) => {
              headers: {
                  "Content-Type": "application/json",
              },
-             body: JSON.stringify({ text:prompt ,language:toLau ,levelLang:levelValue}),
+             body: JSON.stringify({  
+                text: prompt,
+            language: toLau,
+            levelLang: levelValue}),
          })
           
          const data = await response.json()
          stopIt = false
          geminiIcon.style.display = 'none'
          output.innerText = data.aitext
-         history.unshift(data)
      } catch (error) {
          output.innerText = '无法获取信息'
          stopIt = false
