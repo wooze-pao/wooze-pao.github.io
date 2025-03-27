@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>翻译页</title>
-    <link rel="icon" href="assets/gemini-color.svg">
+    <title>google translate</title>
+    <link rel="icon" href="assets/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -312,7 +312,7 @@ const getAiData = async(prompt) => {
      //console.log(prompt)
 
      try {
-         const apiUrl = 'https://cloudfront.wooze.tech/api/data'
+         const apiUrl = 'http://d2ibqyvsff9kl6.cloudfront.net/api/data'
          const response = await fetch(apiUrl, {
              method: "POST",
              headers: {
@@ -343,6 +343,27 @@ const openSwitch = () => {
    else{
     container.style.display = 'none'
    }
+}
+
+const sendInfo = async() => {
+    if(!stopIt) {
+        stopIt = true
+       
+        const prompt = textinput.value.trim()
+        
+        if (prompt === ''){
+            alert('请输入文本')
+            stopIt = false
+            return
+        }
+        
+        await getAiData(prompt)
+        console.log('发送请求成功')
+       }else{
+        stopIt = false
+        console.log('发送请求禁止')
+        return
+       }
 }
 
 //事件监听模块
@@ -377,8 +398,6 @@ btn.addEventListener('click',() => {
 
     localStorage.setItem('mainLang', mainLau);
     localStorage.setItem('toLang', toLau);
-
-    getAiData(prompt)
 })
 
 level.addEventListener('change',() => {
@@ -386,29 +405,12 @@ level.addEventListener('change',() => {
    localStorage.setItem('Level',levelValue)
 })
 
-textinput.addEventListener('keydown',async(event) => {
+textinput.addEventListener('keydown',(event) => {
     const key = event.key
     
     if (key === "Enter")
     {
-       if(!stopIt) {
-        stopIt = true
-       
-        const prompt = textinput.value.trim()
-        
-        if (prompt === ''){
-            alert('请输入文本')
-            stopIt = false
-            return
-        }
-        
-        await getAiData(prompt)
-        console.log('发送请求成功')
-       }else{
-        stopIt = false
-        console.log('发送请求禁止')
-        return
-       }
+       sendInfo()
         
     }
     
