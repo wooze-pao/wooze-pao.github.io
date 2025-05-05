@@ -115,37 +115,35 @@ const dropDownBar = (array) => {
 
 }
 
-//获取后端ai
 const getAiData = async (prompt) => {
     output.innerText = "";
     promptChache = prompt;
 
     if (!geminiIcon.parentNode) {
-        output.appendChild(geminiIcon);  
+        output.appendChild(geminiIcon);
     }
 
-    geminiIcon.style.display = 'block'; 
+    geminiIcon.style.display = 'block';
     geminiIcon.classList.add('spin');
-    
-    try {
-        // 使用查询参数构造 URL
-        const apiUrl = `https://script.google.com/macros/s/AKfycbzg_77e9LRkpp86nKThkXRcLg35st9YJjpDYG35RglUE5H0m3lTkrk-92GDiwd15ynJ5Q/exec?prompt=${encodeURIComponent(prompt)}`
+     //console.log(prompt)
 
-        // 发送 GET 请求
-        const response = await fetch(apiUrl, {
-            method: "GET",
-        });
+     try {
+         const apiUrl = `https://script.google.com/macros/s/AKfycbzg_77e9LRkpp86nKThkXRcLg35st9YJjpDYG35RglUE5H0m3lTkrk-92GDiwd15ynJ5Q/exec?=prompt=${encodeURIComponent(prompt)}`
+         const response = await fetch(apiUrl, {
+           method: "GET",
+         });
 
-        // 解析响应数据
-        const data = await response.json();
-        stopIt = false;
-        geminiIcon.style.display = 'none';
-        output.innerText = data.aitext;
-    } catch (error) {
-        output.innerText = '无法获取信息';
-        stopIt = false;
-    }
+         const data = await response.json()
+         stopIt = false
+         geminiIcon.style.display = 'none'
+         output.innerText = data
+     } catch (error) {
+         output.innerText = '无法获取信息'
+         stopIt = false
+     }
 }
+
+
 
 
 //事件监听模块
