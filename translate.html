@@ -311,7 +311,7 @@ const getAiData = async (prompt) => {
      //console.log(prompt)
 
      try {
-         const apiUrl = `https://script.google.com/macros/s/AKfycbzg_77e9LRkpp86nKThkXRcLg35st9YJjpDYG35RglUE5H0m3lTkrk-92GDiwd15ynJ5Q/exec?prompt=${encodeURIComponent(prompt)}`
+         const apiUrl = `https://script.google.com/macros/s/AKfycbxazC6x5S3WfB_2V3NZ9Zrnb5rwPQN6fFrc709zaHaPo0dqUCU3AYM4YeuuzoYj4IODnw/exec?prompt=${encodeURIComponent(prompt)}&toLang=${encodeURIComponent(toLau)}&level=${levelValue}`
          const response = await fetch(apiUrl, {
            method: "GET",
          });
